@@ -40,5 +40,5 @@ function restrict() {
 // };
 
 module.exports = {
-  restrict()
+  restrict
 }
