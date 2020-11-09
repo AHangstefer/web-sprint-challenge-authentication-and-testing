@@ -12,12 +12,20 @@ async function add(user){
 //         .first()
 // }
 
+// async function findBy(username){
+//     return db("users")
+//         .select("username")
+//         .where("users.username", username)
+//         .first(username)
+        
+        
+// }
+
 async function findBy(username){
     return db("users")
-        .select("username")
+        
         .where("users.username", username)
-        
-        
+        .first("users.username")
 }
 
 module.exports = {

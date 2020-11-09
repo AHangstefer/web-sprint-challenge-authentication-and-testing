@@ -12,10 +12,10 @@ const server = express()
 
 server.use(helmet())
 server.use(cors())
-server.use(express.json())
 server.use(cookie())
+server.use(express.json())
 
 server.use('/api/auth', authRouter)
-server.use('/api/jokes', restrict(), jokesRouter)
+server.use('/api/jokes', restrict, jokesRouter)
 
 module.exports = server;

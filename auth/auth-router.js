@@ -1,6 +1,6 @@
 const router = require("express").Router()
 const bcrypt = require("bcryptjs")
-const model = require("./authModel")
+const User = require("./authModel")
 //const {restrict} =require("./authenticate-middleware")
 const jwt = require("jsonwebtoken")
 
@@ -10,8 +10,8 @@ router.post('/register', async (req, res, next) => {
   // implement registration
    try{
         const {username, password} = req.body
-        const user = await model.findBy(username)
-        console.log(user)
+        const user = await User.findBy(username)
+      
 
         if(user){
           return res.status(409).json({
@@ -19,7 +19,7 @@ router.post('/register', async (req, res, next) => {
           })
         }
 
-        const newUser = await model.add({
+        const newUser = await User.add({
           username,
           password: await bcrypt.hash(password,10)
         })
@@ -28,7 +28,7 @@ router.post('/register', async (req, res, next) => {
 
   }
   catch(err){
-    next(err.message)
+    next(err)
   }
     
 });
@@ -38,7 +38,8 @@ router.post('/login', async (req, res, next) => {
   try{
 
         const {username, password} = req.body
-        const user = await model.findBy(username)
+        const user = await User.findBy(username)
+        const passwordValid = await bcrypt.compare(password, user.password)
 
         if(!user){
           return res.status(401).json({
@@ -46,7 +47,7 @@ router.post('/login', async (req, res, next) => {
           })
         }
 
-        const passwordValid = await bcrypt.compare(password, user.password)
+        
 
         if (!passwordValid) {
           return res.status(401).json({
