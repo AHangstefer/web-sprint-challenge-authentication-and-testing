@@ -5,10 +5,19 @@ async function add(user){
     return findBy(id)
 }
 
-async function findBy(filter){
+// async function findBy(filter){
+//     return db("users")
+//         .select("id", "username")
+//         .where(filter)
+//         .first()
+// }
+
+async function findBy(username){
     return db("users")
-        .select("id", "username")
-        .where(filter)
+        .select("username")
+        .where("users.username", username)
+        
+        
 }
 
 module.exports = {

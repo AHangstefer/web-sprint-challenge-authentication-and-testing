@@ -1,16 +1,17 @@
-const express = require("express")
+const router = require("express").Router()
 const bcrypt = require("bcryptjs")
 const model = require("./authModel")
-const {restrict} =require("./authenticate-middleware")
+//const {restrict} =require("./authenticate-middleware")
 const jwt = require("jsonwebtoken")
 
-const router= express.Router()
+//const router= express.Router()
 
 router.post('/register', async (req, res, next) => {
   // implement registration
    try{
         const {username, password} = req.body
         const user = await model.findBy(username)
+        console.log(user)
 
         if(user){
           return res.status(409).json({
@@ -27,7 +28,7 @@ router.post('/register', async (req, res, next) => {
 
   }
   catch(err){
-    next(err)
+    next(err.message)
   }
     
 });

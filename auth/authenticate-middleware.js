@@ -2,7 +2,7 @@
   complete the middleware code to check if the user is logged in
   before granting access to the next middleware/route handler
 */
-const token = require("jsonwebtoken")
+const jwt = require("jsonwebtoken")
 
 function restrict() {
   return async (req, res, next) =>{
