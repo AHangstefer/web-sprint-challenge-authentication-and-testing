@@ -7,8 +7,10 @@ async function add(user){
 
 async function findByUserId(id){
     return await db("users")
-            .select("username", "password")
+            .select("username", "id")
             .where("id",id)
+            
+            
             
 
 }
