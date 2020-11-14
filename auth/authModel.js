@@ -38,9 +38,34 @@ async function findBy(username){
         
 }
 
+async function finditDamn(username){
+    return db("users")
+        .where("username", username)
+        .first(users.id)
+}
+
+
+
+//Error: select `Dean` as `username` from `users` - 
+// SQLITE_ERROR: no such column: Dean
+// async function finditDamn(filter){
+//     return db("users")
+//         .select(filter)
+        //.where("id", id)
+//}
+
+
+// this one returns: "Illegal arguments: string, undefined"
+// async function finditDamn(username){
+//     return db("users")
+//         .select("username", "id")
+//         .where("username", username)
+// }
+
 module.exports = {
     add,
     findBy,
-    findByUserId
+    findByUserId,
+    finditDamn
 
 }

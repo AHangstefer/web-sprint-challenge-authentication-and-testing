@@ -39,16 +39,22 @@ router.post('/login', async (req, res, next) => {
 
         const {username, password} = req.body
         //const id = req.params.id
-        const user = await User.findByUserId(id)
+        //const user = await User.findByUserId(id)
+        //const oldUser = await User.finditDamn({username})
+
+       // this one is returning the if statement below
+       //const oldUser 
+        const oldUser = await User.finditDamn({username})
+        
         
 
-        if(!user){
+        if(!oldUser){
           return res.status(401).json({
             message: "Invalid Credentials from login router"
           })
         }
 
-        const passwordValid = await bcrypt.compare(password, user.password)
+        const passwordValid = await bcrypt.compare(password, oldUser.password)
 
         if (!passwordValid) {
           return res.status(401).json({
@@ -56,14 +62,15 @@ router.post('/login', async (req, res, next) => {
           })
         }
 
+
         const token = jwt.sign({
-          userID: user.indexOf,
+          userID: oldUser.id,
         }, process.env.JWT_SECRET)
 
         res.cookie("token", token)
 
         res.json({
-          message: `Welcome ${user.username}`
+          message: `Welcome ${oldUser.username}`
         })
   }
   catch(err){
