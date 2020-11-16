@@ -2,12 +2,12 @@ const db = require("../database/dbConfig")
 
 async function add(user){
     const [id] = await db("users").insert(user)
-    return findByUserId(id)
+        return findByUserId(id)
 }
 
 async function findByUserId(id){
     return await db("users")
-            .select("username", "id")
+            .select("username", "id", "password")
             .where("id",id)
             
             
@@ -38,11 +38,20 @@ async function findBy(username){
         
 }
 
-async function finditDamn(username){
+//Id is not defined
+function finditDamn(username){
     return db("users")
-        .where("username", username)
-        .first(users.id)
+        .select("id", "username", "password")
+        .where(username)
+        
 }
+
+// Error: Illegal arguments: string, undefined
+// function finditDamn(id) {
+//     return db("users")
+//       .where({ id })
+//       .select("id", "username");
+//   }
 
 
 

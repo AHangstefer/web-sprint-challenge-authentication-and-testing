@@ -1,7 +1,7 @@
 const router = require("express").Router()
 const bcrypt = require("bcryptjs")
 const User = require("./authModel")
-//const {restrict} =require("./authenticate-middleware")
+const {restrict} =require("./authenticate-middleware")
 const jwt = require("jsonwebtoken")
 
 //const router= express.Router()
@@ -11,7 +11,7 @@ router.post('/register', async (req, res, next) => {
    try{
         const {username, password} = req.body
         const user = await User.findBy({username})
-      
+        
 
         if(user){
           return res.status(409).json({
@@ -23,6 +23,7 @@ router.post('/register', async (req, res, next) => {
           username,
           password: await bcrypt.hash(password,10)
         })
+        console.log(newUser)
 
         res.status(201).json(newUser)
 
@@ -43,8 +44,10 @@ router.post('/login', async (req, res, next) => {
         //const oldUser = await User.finditDamn({username})
 
        // this one is returning the if statement below
-       //const oldUser 
-        const oldUser = await User.finditDamn({username})
+       //const oldUser = await User.findBy(username)
+       
+        const oldUser = await User.finditDamn({username}).first()
+        console.log(username, password)
         
         
 
@@ -54,7 +57,7 @@ router.post('/login', async (req, res, next) => {
           })
         }
 
-        const passwordValid = await bcrypt.compare(password, oldUser.password)
+        const passwordValid = await bcrypt.compareSync(password,oldUser.password)
 
         if (!passwordValid) {
           return res.status(401).json({
@@ -65,7 +68,8 @@ router.post('/login', async (req, res, next) => {
 
         const token = jwt.sign({
           userID: oldUser.id,
-        }, process.env.JWT_SECRET)
+        }, "anything", {expiresIn: "1d"})
+        //process.env.JWT_SECRET, {expiresIn: "1d"})
 
         res.cookie("token", token)
 
